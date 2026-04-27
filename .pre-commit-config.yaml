@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: bump-version
+        name: Bump patch version in VERSION
+        entry: python3 scripts/bump_version.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
