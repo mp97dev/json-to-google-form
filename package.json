@@ -16,6 +16,8 @@
     "build": "npm run build -w backend && npm run build -w frontend && npm run build -w cli",
     "test": "npm run test -w backend && npm run test -w frontend && npm run test -w cli",
     "lint": "npm run lint -w backend && npm run lint -w frontend && npm run lint -w cli",
+    "hooks:install": "pre-commit install",
+    "hooks:run": "pre-commit run --all-files",
     "format": "prettier --write \"**/*.{ts,js,cjs,mjs,json,md,yml,yaml,html,css}\"",
     "format:check": "prettier --check \"**/*.{ts,js,cjs,mjs,json,md,yml,yaml,html,css}\""
   },

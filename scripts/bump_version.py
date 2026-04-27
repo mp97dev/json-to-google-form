@@ -2,9 +2,24 @@
 from __future__ import annotations
 
 from pathlib import Path
+import subprocess
+
+
+def is_version_staged() -> bool:
+    result = subprocess.run(
+        ["git", "diff", "--cached", "--name-only", "--", "VERSION"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return "VERSION" in result.stdout.splitlines()
 
 
 def main() -> int:
+    if is_version_staged():
+        print('VERSION already staged, skipping bump.')
+        return 0
+
     version_file = Path("VERSION")
     current = version_file.read_text(encoding="utf-8").strip()
 
