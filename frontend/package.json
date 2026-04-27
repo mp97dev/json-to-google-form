@@ -1,0 +1,28 @@
+{
+  "name": "@json-to-google-form/frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "ng serve --host 0.0.0.0 --port 4200",
+    "build": "ng build",
+    "test": "jest --config ./jest.config.cjs --runInBand",
+    "lint": "eslint \"src/**/*.ts\""
+  },
+  "dependencies": {
+    "@angular/animations": "^19.2.15",
+    "@angular/common": "^19.2.15",
+    "@angular/compiler": "^19.2.15",
+    "@angular/core": "^19.2.15",
+    "@angular/forms": "^19.2.15",
+    "@angular/platform-browser": "^19.2.15",
+    "@angular/platform-browser-dynamic": "^19.2.15",
+    "rxjs": "^7.8.1",
+    "zone.js": "^0.15.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^19.2.15",
+    "@angular/cli": "^19.2.15",
+    "@angular/compiler-cli": "^19.2.15",
+    "@types/node": "^22.13.11"
+  }
+}

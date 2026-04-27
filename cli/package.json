@@ -1,0 +1,19 @@
+{
+  "name": "@json-to-google-form/cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "bin": {
+    "create-form": "dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts --help",
+    "build": "tsc -p tsconfig.json",
+    "test": "jest --config ./jest.config.cjs --runInBand",
+    "lint": "eslint \"src/**/*.ts\""
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.11",
+    "tsx": "^4.19.3"
+  }
+}

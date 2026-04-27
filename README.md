@@ -295,3 +295,60 @@ Main work items:
 3. Build OAuth flow
 4. Create Angular UI
 5. Add CLI tool
+
+## Phase 1 Foundation (Implemented)
+
+Phase 1 baseline is now scaffolded with:
+
+- npm workspaces monorepo (`backend`, `frontend`, `cli`)
+- NestJS backend skeleton
+- Angular frontend skeleton
+- CLI starter command
+- Shared ESLint, Prettier, TypeScript, and Jest baseline
+- GitHub Actions CI for lint + test
+- Environment templates for backend and frontend
+
+## Quickstart
+
+### Prerequisites
+
+- Node.js 20 LTS
+- npm 10+
+
+### Setup
+
+```bash
+npm install
+```
+
+### Run in Development
+
+```bash
+npm run dev
+```
+
+Default local endpoints:
+
+- Backend health: `http://localhost:3000/health`
+- Frontend dev server: `http://localhost:4200`
+
+### Build, Test, Lint
+
+```bash
+npm run build
+npm run test
+npm run lint
+```
+
+### Environment Templates
+
+- Backend: `backend/.env.example`
+- Frontend: `frontend/.env.example`
+
+## Phase 1 Exit Checklist
+
+- `npm install` completes without blockers
+- `npm run dev` starts backend and frontend
+- `npm run lint` passes
+- `npm run test` passes
+- CI runs lint + test on push and pull_request
