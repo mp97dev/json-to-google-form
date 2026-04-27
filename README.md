@@ -247,19 +247,14 @@ https://docs.google.com/forms/d/FORM_ID
 
 ## Deployment
 
-Recommended stack:
+Recommended stack for this repository:
 
-- Frontend: Vercel or Netlify
-- Backend: Railway, Render, or Firebase Functions
+- Railway single-service deploy (frontend + backend in one container)
+- Configured with `railway.toml` + `Dockerfile` (non-deprecated flow)
 
-Steps:
+Step-by-step guide:
 
-1. Create Google Cloud project
-2. Enable Google Forms API
-3. Configure OAuth consent screen
-4. Deploy backend
-5. Deploy frontend
-6. Connect via environment variables
+- See `docs/deploy-railway-single-service.md`
 
 ## Security
 
