@@ -8,7 +8,7 @@ envsubst '${PORT} ${BACKEND_PORT}' \
   < /app/deploy/nginx/default.conf.template \
   > /etc/nginx/conf.d/default.conf
 
-PORT="$BACKEND_PORT" node /app/backend/dist/main.js &
+node /app/backend/dist/main.js &
 backend_pid=$!
 
 cleanup() {
