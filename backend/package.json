@@ -14,7 +14,7 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
-    "@nestjs/swagger": "^8.0.0",
+    "@nestjs/swagger": "^11.0.0",
     "@nestjs/throttler": "^6.0.0",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
