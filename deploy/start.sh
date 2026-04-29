@@ -8,6 +8,7 @@ envsubst '${PORT} ${BACKEND_PORT}' \
   < /app/deploy/nginx/default.conf.template \
   > /etc/nginx/conf.d/default.conf
 
+export BACKEND_PORT
 node /app/backend/dist/main.js &
 backend_pid=$!
 

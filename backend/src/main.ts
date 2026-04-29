@@ -21,7 +21,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api/docs', app, document);
 
-  const port = Number(process.env.PORT ?? 3000);
+  // Usa sempre BACKEND_PORT (default 3000), ignora process.env.PORT per evitare conflitto con nginx/Railway
+  const port = Number(process.env.BACKEND_PORT ?? 3000);
   await app.listen(port, '0.0.0.0');
 }
 
