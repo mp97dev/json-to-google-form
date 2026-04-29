@@ -34,6 +34,8 @@ def main() -> int:
 
     version_file.write_text(f"{next_version}\n", encoding="utf-8")
     print(f"Updated VERSION: {current} -> {next_version}")
+    # Aggiungi VERSION allo staging
+    subprocess.run(["git", "add", "VERSION"], check=True)
     return 0
 
 
