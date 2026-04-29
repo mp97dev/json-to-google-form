@@ -7,3 +7,15 @@ restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 healthcheckPath = "/health"
 healthcheckTimeout = 120
+numReplicas = 1
+sleepApplication = false
+
+# Required environment variables (set in Railway dashboard):
+#   GOOGLE_CLIENT_ID        — OAuth 2.0 Client ID
+#   GOOGLE_REDIRECT_URI     — https://<RAILWAY_DOMAIN>/api/auth/google/callback
+#
+# Optional:
+#   GOOGLE_CLIENT_SECRET    — enables server-side token exchange
+#   GOOGLE_OAUTH_EXCHANGE_ENABLED — set to "true" to exchange code for token
+#   CORS_ORIGIN             — https://<RAILWAY_DOMAIN>
+#   BACKEND_PORT            — internal NestJS port (default: 3000)

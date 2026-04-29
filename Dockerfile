@@ -21,9 +21,14 @@ RUN apt-get update \
 
 WORKDIR /app
 
-COPY --from=build /app/node_modules /app/node_modules
+# Copy only dsl schema (needed by AJV validator at runtime) and backend dist
+COPY --from=build /app/dsl /app/dsl
 COPY --from=build /app/backend/dist /app/backend/dist
 COPY --from=build /app/frontend/dist/frontend/browser /srv/frontend
+
+# Install only production dependencies for the backend
+COPY backend/package*.json /app/backend/
+RUN npm ci --omit=dev --prefix /app/backend
 
 COPY deploy/nginx/default.conf.template /app/deploy/nginx/default.conf.template
 COPY deploy/start.sh /app/deploy/start.sh

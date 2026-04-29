@@ -1,10 +1,58 @@
 {
-  "title": "Phase 1 Example",
-  "description": "Basic scaffold payload",
-  "sections": [
+  "id": "form-001",
+  "title": "Sample Survey",
+  "description": "A basic survey to demonstrate the DSL format.",
+  "mode": "form",
+  "settings": {
+    "collectEmails": true,
+    "limitOneResponse": false,
+    "shuffleQuestions": false
+  },
+  "pages": [
     {
-      "title": "General",
-      "items": []
+      "id": "page-1",
+      "title": "Personal Information",
+      "questions": [
+        {
+          "id": "q1",
+          "type": "short_answer",
+          "title": "What is your name?",
+          "required": true
+        },
+        {
+          "id": "q2",
+          "type": "multiple_choice",
+          "title": "What is your age group?",
+          "required": true,
+          "options": ["Under 18", "18–24", "25–34", "35–44", "45+"]
+        }
+      ]
+    },
+    {
+      "id": "page-2",
+      "title": "Preferences",
+      "questions": [
+        {
+          "id": "q3",
+          "type": "checkbox",
+          "title": "Which topics interest you?",
+          "required": false,
+          "options": ["Technology", "Science", "Arts", "Sports", "Politics"]
+        },
+        {
+          "id": "q4",
+          "type": "dropdown",
+          "title": "How did you hear about us?",
+          "required": true,
+          "options": ["Social media", "Friend", "Search engine", "Advertisement", "Other"]
+        },
+        {
+          "id": "q5",
+          "type": "text",
+          "title": "Any additional comments?",
+          "required": false
+        }
+      ]
     }
   ]
 }

@@ -35,7 +35,7 @@ Questi file implementano il deploy single-service:
 3. Configura "OAuth consent screen".
 4. Crea un OAuth Client ID di tipo Web application.
 5. Aggiungi tra le Authorized redirect URIs:
-   - `https://<RAILWAY_DOMAIN>/api/auth/google/callback`
+   - `https://json-to-google-form.up.railway.app/api/auth/google/callback`
 
 Nota: su Railway, con reverse proxy Nginx, il callback pubblico include il prefisso `/api`.
 
@@ -46,7 +46,7 @@ In Railway, nel servizio, vai su Variables e imposta:
 ### Obbligatorie
 
 - `GOOGLE_CLIENT_ID`: client ID OAuth Google
-- `GOOGLE_REDIRECT_URI`: `https://<RAILWAY_DOMAIN>/api/auth/google/callback`
+- `GOOGLE_REDIRECT_URI`: `https://json-to-google-form.up.railway.app/api/auth/google/callback`
 
 ### Opzionali / consigliate
 
