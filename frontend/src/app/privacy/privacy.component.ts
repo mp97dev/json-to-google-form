@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -113,4 +114,10 @@ import { RouterLink } from '@angular/router';
     }
   `],
 })
-export class PrivacyComponent {}
+export class PrivacyComponent implements OnInit {
+  constructor(private readonly title: Title) {}
+
+  ngOnInit(): void {
+    this.title.setTitle('Privacy Policy | JSON → Google Form');
+  }
+}

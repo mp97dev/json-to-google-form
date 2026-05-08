@@ -1,19 +1,22 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { I18nService } from './services/i18n.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink],
   template: `
     <header class="app-header">
-      <span class="app-name">json → form</span>
+      <a routerLink="/" class="app-name">JSON &rarr; Google Form</a>
       <button type="button" class="lang-toggle" (click)="i18n.toggle()">
         {{ i18n.lang() === 'it' ? 'EN' : 'IT' }}
       </button>
     </header>
     <router-outlet />
+    <footer class="app-footer">
+      <a routerLink="/privacy">{{ i18n.lang() === 'it' ? 'Informativa sulla privacy' : 'Privacy Policy' }}</a>
+    </footer>
   `,
   styles: [`
     .app-header {
@@ -34,6 +37,11 @@ import { I18nService } from './services/i18n.service';
       font-weight: 700;
       color: var(--text-primary);
       letter-spacing: -.02em;
+      text-decoration: none;
+    }
+
+    .app-name:hover {
+      color: var(--accent);
     }
 
     .lang-toggle {
@@ -52,6 +60,24 @@ import { I18nService } from './services/i18n.service';
     .lang-toggle:hover {
       border-color: var(--accent);
       color: var(--accent);
+    }
+
+    .app-footer {
+      text-align: center;
+      padding: 1.5rem 1rem 2rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    .app-footer a {
+      color: var(--text-secondary);
+      font-size: .82rem;
+      text-decoration: none;
+    }
+
+    .app-footer a:hover {
+      color: var(--accent);
+      text-decoration: underline;
     }
   `],
 })

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { FormsService } from './services/forms.service';
 import { I18nService } from './services/i18n.service';
 import { environment } from '../environments/environment';
@@ -309,9 +310,11 @@ Rules: pages sequential only; options required for multiple_choice/checkbox/drop
   constructor(
     private readonly formsService: FormsService,
     readonly i18n: I18nService,
+    private readonly title: Title,
   ) {}
 
   ngOnInit(): void {
+    this.title.setTitle('JSON → Google Form');
     const pending = sessionStorage.getItem('pending_dsl');
     if (pending) {
       this.dslJson = pending;
