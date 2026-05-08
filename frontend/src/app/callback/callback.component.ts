@@ -25,7 +25,7 @@ export class CallbackComponent implements OnInit {
 
       if (token) {
         sessionStorage.setItem('access_token', token);
-        void this.router.navigate(['/editor']);
+        void this.router.navigate(['/']);
       } else if (code) {
         // Backend handles code exchange server-side; token should have been returned
         this.message = 'Authentication code received but no token returned. Check backend configuration.';

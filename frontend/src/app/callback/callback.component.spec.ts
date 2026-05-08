@@ -29,11 +29,11 @@ function makeComponent(params: Record<string, string | null>) {
 describe('CallbackComponent', () => {
   beforeEach(() => mockSessionStorage.clear());
 
-  it('saves token to sessionStorage and navigates to /editor when access_token present', () => {
+  it('saves token to sessionStorage and navigates to / when access_token present', () => {
     const { comp, mockRouter } = makeComponent({ access_token: 'tok123', code: null });
     comp.ngOnInit();
     expect(mockSessionStorage.getItem('access_token')).toBe('tok123');
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/editor']);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
   });
 
   it('sets error message when no token and no code', () => {
