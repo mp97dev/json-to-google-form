@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { google } from 'googleapis';
+import { forms } from '@googleapis/forms';
+import { OAuth2Client } from 'google-auth-library';
 import type { FormSettings } from './dsl-types';
 import type { GoogleFormsRequest } from './mapper.service';
 
@@ -8,7 +9,7 @@ export class GoogleFormsService {
   private readonly logger = new Logger(GoogleFormsService.name);
 
   private buildOAuth2Client(accessToken: string) {
-    const client = new google.auth.OAuth2(
+    const client = new OAuth2Client(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
     );
@@ -21,11 +22,11 @@ export class GoogleFormsService {
     title: string,
   ): Promise<{ formId: string; formUrl: string }> {
     const auth = this.buildOAuth2Client(accessToken);
-    const forms = google.forms({ version: 'v1', auth });
+    const formsClient = forms({ version: 'v1', auth });
 
     // Google Forms API v1 only accepts info.title on initial create.
     // All other settings must go through batchUpdate after creation.
-    const response = await forms.forms.create({
+    const response = await formsClient.forms.create({
       requestBody: { info: { title } },
     });
 
@@ -47,9 +48,9 @@ export class GoogleFormsService {
     if (requests.length === 0) return;
 
     const auth = this.buildOAuth2Client(accessToken);
-    const forms = google.forms({ version: 'v1', auth });
+    const formsClient = forms({ version: 'v1', auth });
 
-    await forms.forms.batchUpdate({
+    await formsClient.forms.batchUpdate({
       formId,
       requestBody: { requests },
     });
@@ -65,8 +66,8 @@ export class GoogleFormsService {
   ): Promise<void> {
     if (isQuiz) {
       const auth = this.buildOAuth2Client(accessToken);
-      const forms = google.forms({ version: 'v1', auth });
-      await forms.forms.batchUpdate({
+      const formsClient = forms({ version: 'v1', auth });
+      await formsClient.forms.batchUpdate({
         formId,
         requestBody: {
           requests: [{
