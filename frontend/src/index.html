@@ -48,10 +48,9 @@
     <meta name="google-site-verification" content="WOPDK7oZ-Uz7FoeMyKAUxCPyzJMn71Ynmn6mL_k7iFQ" />
   </head>
   <body>
-    <app-root></app-root>
-    <!-- Crawler-visible privacy link (JS-rendered footer is not visible to bots) -->
-    <noscript>
-      <a href="/privacy">Privacy Policy</a>
-    </noscript>
+    <app-root>
+      <!-- Crawler-visible privacy link; Angular replaces this with its own footer once JS loads -->
+      <a href="/privacy" style="display:block;text-align:center;padding:1rem;color:#8b949e;font-size:.82rem;text-decoration:none;">Privacy Policy</a>
+    </app-root>
   </body>
 </html>
