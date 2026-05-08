@@ -10,7 +10,7 @@ export interface GoogleFormsRequest {
           required: boolean;
           choiceQuestion?: {
             type: 'RADIO' | 'CHECKBOX' | 'DROP_DOWN';
-            options: { value: string; isCorrect?: boolean }[];
+            options: { value: string }[];
             shuffle: boolean;
           };
           textQuestion?: { paragraph: boolean };
@@ -56,10 +56,7 @@ function mapQuestion(
       ? ['True', 'False']
       : (question.options ?? []);
 
-    const mappedOptions = options.map((opt) => ({
-      value: opt,
-      ...(isQuizMode && question.correctAnswer === opt ? { isCorrect: true } : {}),
-    }));
+    const mappedOptions = options.map((opt) => ({ value: opt }));
 
     const grading =
       isQuizMode && question.correctAnswer

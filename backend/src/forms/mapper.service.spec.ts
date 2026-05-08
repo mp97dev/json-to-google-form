@@ -101,6 +101,34 @@ describe('mapDslToGoogleRequests', () => {
     expect(grading?.correctAnswers.answers[0].value).toBe('Rome');
   });
 
+  it('does not include isCorrect in quiz mode options', () => {
+    const form: Form = {
+      ...baseForm,
+      mode: 'quiz',
+      pages: [
+        {
+          id: 'p1',
+          title: 'Page 1',
+          questions: [
+            {
+              id: 'q1',
+              type: 'multiple_choice',
+              title: 'Capital?',
+              required: true,
+              options: ['Rome', 'Paris'],
+              correctAnswer: 'Rome',
+            },
+          ],
+        },
+      ],
+    };
+    const requests = mapDslToGoogleRequests(form);
+    const opts = requests[0].createItem?.item.questionItem?.question.choiceQuestion?.options ?? [];
+    opts.forEach((opt) => {
+      expect(opt).not.toHaveProperty('isCorrect');
+    });
+  });
+
   it('maps text question to paragraph:true', () => {
     const form: Form = {
       ...baseForm,
