@@ -54,12 +54,11 @@ export class FormsController {
     const { formId, formUrl } = await this.googleForms.createForm(
       accessToken,
       form.title,
-      form.mode === 'quiz',
     );
 
     const requests = mapDslToGoogleRequests(form);
     await this.googleForms.batchUpdate(accessToken, formId, requests);
-    await this.googleForms.patchFormSettings(accessToken, formId, form.settings);
+    await this.googleForms.patchFormSettings(accessToken, formId, form.settings, form.mode === 'quiz');
 
     return { formId, formUrl };
   }

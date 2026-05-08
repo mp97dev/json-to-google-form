@@ -19,16 +19,14 @@ export class GoogleFormsService {
   async createForm(
     accessToken: string,
     title: string,
-    isQuiz: boolean,
   ): Promise<{ formId: string; formUrl: string }> {
     const auth = this.buildOAuth2Client(accessToken);
     const forms = google.forms({ version: 'v1', auth });
 
+    // Google Forms API v1 only accepts info.title on initial create.
+    // All other settings must go through batchUpdate after creation.
     const response = await forms.forms.create({
-      requestBody: {
-        info: { title },
-        ...(isQuiz ? { settings: { quizSettings: { isQuiz: true } } } : {}),
-      },
+      requestBody: { info: { title } },
     });
 
     const formId = response.data.formId;
@@ -60,13 +58,29 @@ export class GoogleFormsService {
   }
 
   async patchFormSettings(
-    _accessToken: string,
+    accessToken: string,
     formId: string,
     settings: FormSettings,
+    isQuiz: boolean = false,
   ): Promise<void> {
-    // Google Forms API v1 REST does not expose collectEmails, limitOneResponse,
-    // or shuffleQuestions as patchable fields. Only quizSettings is settable
-    // (handled at createForm time). Log warnings so operators know the limits.
+    if (isQuiz) {
+      const auth = this.buildOAuth2Client(accessToken);
+      const forms = google.forms({ version: 'v1', auth });
+      await forms.forms.batchUpdate({
+        formId,
+        requestBody: {
+          requests: [{
+            updateSettings: {
+              settings: { quizSettings: { isQuiz: true } },
+              updateMask: 'quizSettings.isQuiz',
+            },
+          }],
+        },
+      });
+      this.logger.log(`Form ${formId}: quiz mode enabled`);
+    }
+
+    // These settings are not patchable via Forms API v1 REST.
     if (settings.collectEmails) {
       this.logger.warn(`Form ${formId}: collectEmails cannot be set via Forms API v1 REST — skipped.`);
     }
