@@ -202,4 +202,46 @@ describe('mapDslToGoogleRequests', () => {
       'https://www.youtube.com/watch?v=abc',
     );
   });
+
+  it('does not set itemId on any createItem (Google API rejects non-numeric IDs)', () => {
+    const requests = mapDslToGoogleRequests(baseForm);
+    requests.forEach((req) => {
+      expect(req.createItem?.item).not.toHaveProperty('itemId');
+    });
+  });
+
+  it('does not set itemId on quiz or multi-page forms', () => {
+    const quizForm: Form = {
+      ...baseForm,
+      mode: 'quiz',
+      pages: [
+        {
+          id: 'p1',
+          title: 'Page 1',
+          questions: [
+            {
+              id: 'q1',
+              type: 'multiple_choice',
+              title: 'Capital?',
+              required: true,
+              options: ['Rome', 'Paris'],
+              correctAnswer: 'Rome',
+              score: 2,
+            },
+          ],
+        },
+        {
+          id: 'p2',
+          title: 'Page 2',
+          questions: [{ id: 'q2', type: 'short_answer', title: 'Open?', required: false }],
+        },
+      ],
+    };
+    const requests = mapDslToGoogleRequests(quizForm);
+    // 3 items: q1, pageBreak before p2, q2
+    expect(requests).toHaveLength(3);
+    requests.forEach((req) => {
+      expect(req.createItem?.item).not.toHaveProperty('itemId');
+    });
+  });
 });

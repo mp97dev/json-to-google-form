@@ -70,7 +70,6 @@ function mapQuestion(
       createItem: {
         item: {
           title: question.title,
-          itemId: question.id,
           questionItem: {
             question: {
               required: question.required,
@@ -93,7 +92,6 @@ function mapQuestion(
     createItem: {
       item: {
         title: question.title,
-        itemId: question.id,
         questionItem: {
           question: {
             required: question.required,
