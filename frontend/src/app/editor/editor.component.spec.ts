@@ -10,8 +10,11 @@ const mockSessionStorage = {
   clear: () => { Object.keys(store).forEach((k) => delete store[k]); },
 };
 
+const mockClipboard = { writeText: jest.fn().mockResolvedValue(undefined) };
+
 beforeAll(() => {
   Object.defineProperty(global, 'sessionStorage', { value: mockSessionStorage, configurable: true });
+  Object.defineProperty(global.navigator, 'clipboard', { value: mockClipboard, configurable: true });
 });
 
 function makeService() {
@@ -89,5 +92,44 @@ describe('EditorComponent', () => {
     comp.create();
     expect(comp.serverError).toBe('Server error');
     expect(comp.state).toBe('error');
+  });
+
+  it('copyPrompt: calls clipboard.writeText with the schema prompt', async () => {
+    mockClipboard.writeText.mockClear();
+    await comp.copyPrompt();
+    expect(mockClipboard.writeText).toHaveBeenCalledWith(expect.stringContaining('"mode": "form" | "quiz"'));
+    expect(comp.promptCopied).toBe(true);
+  });
+
+  it('copyPrompt: resets promptCopied after 2 s', async () => {
+    jest.useFakeTimers();
+    await comp.copyPrompt();
+    expect(comp.promptCopied).toBe(true);
+    jest.advanceTimersByTime(2001);
+    expect(comp.promptCopied).toBe(false);
+    jest.useRealTimers();
+  });
+
+  it('onPaste: triggers validate after 500 ms', () => {
+    jest.useFakeTimers();
+    comp.dslJson = '{"title":"T"}';
+    svc.validate.mockReturnValue(of({ valid: true, errors: [] }));
+    comp.onPaste();
+    expect(svc.validate).not.toHaveBeenCalled();
+    jest.advanceTimersByTime(500);
+    expect(svc.validate).toHaveBeenCalledTimes(1);
+    jest.useRealTimers();
+  });
+
+  it('onPaste: debounces rapid calls — validate fires only once', () => {
+    jest.useFakeTimers();
+    comp.dslJson = '{}';
+    svc.validate.mockReturnValue(of({ valid: false, errors: [] }));
+    comp.onPaste();
+    comp.onPaste();
+    comp.onPaste();
+    jest.advanceTimersByTime(600);
+    expect(svc.validate).toHaveBeenCalledTimes(1);
+    jest.useRealTimers();
   });
 });

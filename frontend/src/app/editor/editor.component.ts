@@ -15,11 +15,37 @@ type AppState = 'idle' | 'validating' | 'creating' | 'success' | 'error';
         <h1>Form Editor</h1>
         <p class="hint">Paste your JSON DSL below, then validate or create your Google Form.</p>
 
+        <div class="guide">
+          <p class="guide-title">How to use an AI assistant to build your form</p>
+          <ol class="guide-steps">
+            <li>
+              <strong>Chat with your AI assistant</strong>
+              <span>Describe the form or quiz you need — topic, number of questions, question types, mode (survey or quiz).</span>
+            </li>
+            <li>
+              <strong>Copy the JSON prompt</strong>
+              <span>Click the button below, then paste it into the same chat to get a valid JSON response.</span>
+              <button type="button" class="copy-btn" (click)="copyPrompt()">
+                {{ promptCopied ? 'Copied!' : 'Copy LLM Prompt' }}
+              </button>
+            </li>
+            <li>
+              <strong>Paste the JSON response</strong>
+              <span>Copy the JSON the AI returns and paste it into the editor below — it validates automatically.</span>
+            </li>
+            <li>
+              <strong>Generate your form</strong>
+              <span>Review any validation errors, fix them if needed, then click <em>Create Form</em>.</span>
+            </li>
+          </ol>
+        </div>
+
         <textarea
           [(ngModel)]="dslJson"
           rows="18"
           placeholder='{ "id": "form-1", "title": "...", ... }'
           [disabled]="state === 'validating' || state === 'creating'"
+          (paste)="onPaste()"
         ></textarea>
 
         <div class="actions">
@@ -71,6 +97,48 @@ type AppState = 'idle' | 'validating' | 'creating' | 'success' | 'error';
     }
     h1 { margin: 0 0 .5rem; font-size: 1.5rem; }
     .hint { color: #666; margin: 0 0 1.25rem; font-size: .9rem; }
+    .guide {
+      background: #f0f7ff;
+      border: 1px solid #c5daf7;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .guide-title {
+      margin: 0 0 .75rem;
+      font-size: .82rem;
+      font-weight: 700;
+      color: #1a3a7a;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .guide-steps {
+      margin: 0;
+      padding-left: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: .8rem;
+    }
+    .guide-steps li {
+      font-size: .88rem;
+      color: #334155;
+      line-height: 1.5;
+    }
+    .guide-steps li strong { display: block; color: #132238; margin-bottom: .1rem; }
+    .guide-steps li span { display: block; margin-bottom: .3rem; }
+    .copy-btn {
+      margin-top: .2rem;
+      padding: .4rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #0f62fe;
+      background: #fff;
+      color: #0f62fe;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+    .copy-btn:hover { background: #e8f0fe; }
     textarea {
       width: 100%;
       font-family: monospace;
@@ -108,6 +176,53 @@ export class EditorComponent {
   validationOk = false;
   formUrl = '';
   serverError = '';
+  promptCopied = false;
+  private debounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+  private readonly LLM_PROMPT = `You are a form-design assistant. Based on our conversation, output ONLY a raw JSON object — no markdown, no explanation, no code blocks.
+
+The JSON must match this schema exactly:
+
+{
+  "id": "<unique string, e.g. form_1>",
+  "title": "<form title>",
+  "description": "<short description>",
+  "mode": "form" | "quiz",
+  "settings": {
+    "collectEmails": true | false,
+    "limitOneResponse": true | false,
+    "shuffleQuestions": true | false
+  },
+  "pages": [
+    {
+      "id": "<unique string, e.g. page_1>",
+      "title": "<section title>",
+      "questions": [
+        {
+          "id": "<unique string, e.g. q_1>",
+          "type": "text" | "multiple_choice" | "checkbox" | "dropdown" | "true_false" | "short_answer",
+          "title": "<question text>",
+          "required": true | false,
+          "options": ["<opt1>", "<opt2>"],
+          "correctAnswer": "<option text — quiz mode only>",
+          "score": 1,
+          "metadata": {
+            "topic": "<optional topic>",
+            "difficulty": "easy" | "medium" | "hard"
+          }
+        }
+      ]
+    }
+  ]
+}
+
+Rules:
+- Pages are sequential only — no branching.
+- Use mode "form" for surveys, "quiz" for graded assessments.
+- options is required for types: multiple_choice, checkbox, dropdown.
+- correctAnswer and score are only used in quiz mode.
+- All id values must be unique strings.
+- Output the complete JSON now.`;
 
   get isWorking(): boolean {
     return this.state === 'validating' || this.state === 'creating';
@@ -170,6 +285,18 @@ export class EditorComponent {
         this.serverError = err?.error?.message ?? err?.message ?? 'Form creation failed';
       },
     });
+  }
+
+  copyPrompt(): void {
+    navigator.clipboard.writeText(this.LLM_PROMPT).then(() => {
+      this.promptCopied = true;
+      setTimeout(() => { this.promptCopied = false; }, 2000);
+    });
+  }
+
+  onPaste(): void {
+    if (this.debounceTimer) clearTimeout(this.debounceTimer);
+    this.debounceTimer = setTimeout(() => this.validate(), 500);
   }
 
   private reset(): void {
