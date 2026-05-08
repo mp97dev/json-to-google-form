@@ -8,6 +8,10 @@ module.exports = {
     '<rootDir>/src/**/*.spec.ts',
   ],
   transform: {
-    '^.+\\.(t|j)s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }],
+    '^.+\\.(t|j)s$': ['ts-jest', {
+      tsconfig: '<rootDir>/tsconfig.json',
+      diagnostics: false,
+      isolatedModules: true,
+    }],
   },
 };

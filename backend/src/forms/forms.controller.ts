@@ -56,9 +56,11 @@ export class FormsController {
       form.title,
     );
 
+    // Quiz mode must be enabled before adding items with grading
+    await this.googleForms.patchFormSettings(accessToken, formId, form.settings, form.mode === 'quiz');
+
     const requests = mapDslToGoogleRequests(form);
     await this.googleForms.batchUpdate(accessToken, formId, requests);
-    await this.googleForms.patchFormSettings(accessToken, formId, form.settings, form.mode === 'quiz');
 
     return { formId, formUrl };
   }
