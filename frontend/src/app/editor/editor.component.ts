@@ -179,50 +179,27 @@ export class EditorComponent {
   promptCopied = false;
   private debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
-  private readonly LLM_PROMPT = `You are a form-design assistant. Based on our conversation, output ONLY a raw JSON object — no markdown, no explanation, no code blocks.
-
-The JSON must match this schema exactly:
+  private readonly LLM_PROMPT = `Output ONLY raw JSON — no markdown, no explanation. Schema (? = optional):
 
 {
-  "id": "<unique string, e.g. form_1>",
-  "title": "<form title>",
-  "description": "<short description>",
-  "mode": "form" | "quiz",
-  "settings": {
-    "collectEmails": true | false,
-    "limitOneResponse": true | false,
-    "shuffleQuestions": true | false
-  },
-  "pages": [
-    {
-      "id": "<unique string, e.g. page_1>",
-      "title": "<section title>",
-      "questions": [
-        {
-          "id": "<unique string, e.g. q_1>",
-          "type": "text" | "multiple_choice" | "checkbox" | "dropdown" | "true_false" | "short_answer",
-          "title": "<question text>",
-          "required": true | false,
-          "options": ["<opt1>", "<opt2>"],
-          "correctAnswer": "<option text — quiz mode only>",
-          "score": 1,
-          "metadata": {
-            "topic": "<optional topic>",
-            "difficulty": "easy" | "medium" | "hard"
-          }
-        }
-      ]
-    }
-  ]
+  "id":"str","title":"str","description":"str",
+  "mode":"form"|"quiz",
+  "settings":{"collectEmails":bool,"limitOneResponse":bool,"shuffleQuestions":bool},
+  "pages":[{
+    "id":"str","title":"str",
+    "questions":[{
+      "id":"str",
+      "type":"text"|"multiple_choice"|"checkbox"|"dropdown"|"true_false"|"short_answer",
+      "title":"str","required":bool,
+      "options?":["str"],
+      "correctAnswer?":"str","score?":1,
+      "media?":{"type":"image"|"video"|"audio","url":"str"},
+      "metadata?":{"topic?":"str","difficulty?":"easy"|"medium"|"hard"}
+    }]
+  }]
 }
 
-Rules:
-- Pages are sequential only — no branching.
-- Use mode "form" for surveys, "quiz" for graded assessments.
-- options is required for types: multiple_choice, checkbox, dropdown.
-- correctAnswer and score are only used in quiz mode.
-- All id values must be unique strings.
-- Output the complete JSON now.`;
+Rules: pages sequential only; options required for multiple_choice/checkbox/dropdown; correctAnswer+score quiz-only; all ids unique. Output complete JSON now.`;
 
   get isWorking(): boolean {
     return this.state === 'validating' || this.state === 'creating';

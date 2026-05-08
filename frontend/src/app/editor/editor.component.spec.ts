@@ -97,7 +97,7 @@ describe('EditorComponent', () => {
   it('copyPrompt: calls clipboard.writeText with the schema prompt', async () => {
     mockClipboard.writeText.mockClear();
     await comp.copyPrompt();
-    expect(mockClipboard.writeText).toHaveBeenCalledWith(expect.stringContaining('"mode": "form" | "quiz"'));
+    expect(mockClipboard.writeText).toHaveBeenCalledWith(expect.stringContaining('"mode":"form"|"quiz"'));
     expect(comp.promptCopied).toBe(true);
   });
 
