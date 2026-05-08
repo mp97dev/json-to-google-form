@@ -8,7 +8,10 @@ import { I18nService } from './services/i18n.service';
   imports: [RouterOutlet, RouterLink],
   template: `
     <header class="app-header">
-      <a routerLink="/" class="app-name">JSON &rarr; Google Form</a>
+      <a routerLink="/" class="app-name">
+        <img src="assets/ginkgo.png" alt="Ginkgo logo" class="app-logo" />
+        JSON &rarr; Google Form
+      </a>
       <button type="button" class="lang-toggle" (click)="i18n.toggle()">
         {{ i18n.lang() === 'it' ? 'EN' : 'IT' }}
       </button>
@@ -32,12 +35,21 @@ import { I18nService } from './services/i18n.service';
     }
 
     .app-name {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
       font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
       font-size: .95rem;
       font-weight: 700;
       color: var(--text-primary);
       letter-spacing: -.02em;
       text-decoration: none;
+    }
+
+    .app-logo {
+      height: 1.6rem;
+      width: auto;
+      display: block;
     }
 
     .app-name:hover {
