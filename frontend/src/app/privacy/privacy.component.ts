@@ -49,7 +49,7 @@ import { RouterLink } from '@angular/router';
         <h2>Contact</h2>
         <p>
           For any privacy-related questions, contact:
-          <a href="mailto:info@ginkgo3d.it">info@ginkgo3d.it</a>
+          <a href="mailto:info@ginkgo3d.it">info&#64;ginkgo3d.it</a>
         </p>
       </section>
 
