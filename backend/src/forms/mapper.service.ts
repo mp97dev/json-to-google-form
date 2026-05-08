@@ -22,6 +22,8 @@ export interface GoogleFormsRequest {
         };
       };
       pageBreakItem?: Record<string, never>;
+      imageItem?: { image: { sourceUri: string } };
+      videoItem?: { video: { youtubeUri: string } };
     };
     location: { index: number };
   };
@@ -134,6 +136,26 @@ export function mapDslToGoogleRequests(form: Form): GoogleFormsRequest[] {
     for (const question of page.questions) {
       requests.push(mapQuestion(question, itemIndex, isQuizMode));
       itemIndex++;
+
+      if (question.media) {
+        const { type, url } = question.media;
+        if (type === 'image') {
+          requests.push({
+            createItem: {
+              item: { title: '', imageItem: { image: { sourceUri: url } } },
+              location: { index: itemIndex },
+            },
+          });
+        } else if (type === 'video') {
+          requests.push({
+            createItem: {
+              item: { title: '', videoItem: { video: { youtubeUri: url } } },
+              location: { index: itemIndex },
+            },
+          });
+        }
+        itemIndex++;
+      }
     }
   }
 

@@ -1,14 +1,5 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-
-interface OAuthCallbackResult {
-  code: string;
-  scope?: string;
-  state?: string;
-  exchangedForTokens: boolean;
-  tokenType?: string;
-  expiresIn?: number;
-  refreshTokenReceived?: boolean;
-}
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 
 interface GoogleTokenResponse {
   access_token?: string;
@@ -24,6 +15,7 @@ interface GoogleTokenResponse {
 export class AuthService {
   private readonly authBaseUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
   private readonly tokenUrl = 'https://oauth2.googleapis.com/token';
+  private readonly stateStore = new Map<string, number>(); // state → expiry epoch ms
 
   buildGoogleAuthorizationUrl() {
     const clientId = this.getRequiredEnv('GOOGLE_CLIENT_ID');
@@ -36,6 +28,10 @@ export class AuthService {
       'https://www.googleapis.com/auth/forms.body',
     ];
 
+    this.pruneExpiredStates();
+    const state = randomUUID();
+    this.stateStore.set(state, Date.now() + 5 * 60_000);
+
     const params = new URLSearchParams({
       client_id: clientId,
       redirect_uri: redirectUri,
@@ -44,30 +40,18 @@ export class AuthService {
       access_type: 'offline',
       prompt: 'consent',
       include_granted_scopes: 'true',
-      state: 'poc-login',
+      state,
     });
 
     return `${this.authBaseUrl}?${params.toString()}`;
   }
 
-  async handleOAuthCallback(
-    code: string,
-    scope?: string,
-    state?: string,
-  ): Promise<OAuthCallbackResult> {
-    const shouldExchangeCode =
-      process.env.GOOGLE_OAUTH_EXCHANGE_CODE === 'true' &&
-      Boolean(process.env.GOOGLE_CLIENT_SECRET);
-
-    if (!shouldExchangeCode) {
-      return {
-        code,
-        scope,
-        state,
-        exchangedForTokens: false,
-      };
+  async handleOAuthCallback(code: string, state?: string): Promise<string> {
+    if (!state || !this.stateStore.has(state) || Date.now() > this.stateStore.get(state)!) {
+      this.stateStore.delete(state ?? '');
+      throw new BadRequestException('Invalid or expired OAuth state');
     }
-
+    this.stateStore.delete(state);
     const tokenPayload = new URLSearchParams({
       code,
       client_id: this.getRequiredEnv('GOOGLE_CLIENT_ID'),
@@ -78,9 +62,7 @@ export class AuthService {
 
     const response = await fetch(this.tokenUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: tokenPayload,
     });
 
@@ -94,15 +76,20 @@ export class AuthService {
       });
     }
 
-    return {
-      code,
-      scope,
-      state,
-      exchangedForTokens: true,
-      tokenType: tokenData.token_type,
-      expiresIn: tokenData.expires_in,
-      refreshTokenReceived: Boolean(tokenData.refresh_token),
-    };
+    if (!tokenData.access_token) {
+      throw new InternalServerErrorException(
+        'Google token exchange did not return access_token',
+      );
+    }
+
+    return tokenData.access_token;
+  }
+
+  private pruneExpiredStates(): void {
+    const now = Date.now();
+    for (const [key, expiry] of this.stateStore) {
+      if (now > expiry) this.stateStore.delete(key);
+    }
   }
 
   private getRequiredEnv(name: string): string {

@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { google } from 'googleapis';
+import type { FormSettings } from './dsl-types';
 import type { GoogleFormsRequest } from './mapper.service';
 
 @Injectable()
@@ -56,5 +57,24 @@ export class GoogleFormsService {
     });
 
     this.logger.log(`BatchUpdate on form ${formId}: ${requests.length} items`);
+  }
+
+  async patchFormSettings(
+    _accessToken: string,
+    formId: string,
+    settings: FormSettings,
+  ): Promise<void> {
+    // Google Forms API v1 REST does not expose collectEmails, limitOneResponse,
+    // or shuffleQuestions as patchable fields. Only quizSettings is settable
+    // (handled at createForm time). Log warnings so operators know the limits.
+    if (settings.collectEmails) {
+      this.logger.warn(`Form ${formId}: collectEmails cannot be set via Forms API v1 REST — skipped.`);
+    }
+    if (settings.limitOneResponse) {
+      this.logger.warn(`Form ${formId}: limitOneResponse cannot be set via Forms API v1 REST — skipped.`);
+    }
+    if (settings.shuffleQuestions) {
+      this.logger.warn(`Form ${formId}: shuffleQuestions is per-page in Forms API v1 and not globally patchable — skipped.`);
+    }
   }
 }

@@ -12,7 +12,7 @@ export type QuestionType =
   | 'true_false'
   | 'short_answer';
 
-export type MediaType = 'image' | 'video' | 'audio';
+export type MediaType = 'image' | 'video';
 
 export interface Media {
   type: MediaType;

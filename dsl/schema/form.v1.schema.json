@@ -56,7 +56,7 @@
                   "required": ["type", "url"],
                   "additionalProperties": false,
                   "properties": {
-                    "type": { "type": "string", "enum": ["image", "video", "audio"] },
+                    "type": { "type": "string", "enum": ["image", "video"] },
                     "url": { "type": "string", "format": "uri" }
                   }
                 },

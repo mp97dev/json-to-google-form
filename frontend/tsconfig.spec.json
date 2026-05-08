@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc/spec",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "allowJs": true,
+    "lib": ["ES2022", "DOM"],
+    "types": ["node", "jest"]
+  },
+  "include": ["src/**/*.ts"]
+}

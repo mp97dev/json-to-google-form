@@ -2,12 +2,14 @@ import { Controller, Get, Query, Res } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 
+type HttpResponse = { redirect(url: string): void };
+
 @Controller('auth/google')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('login')
-  login(@Res() response: { redirect: (url: string) => void }) {
+  login(@Res() response: HttpResponse) {
     const authorizationUrl = this.authService.buildGoogleAuthorizationUrl();
     return response.redirect(authorizationUrl);
   }
@@ -15,22 +17,23 @@ export class AuthController {
   @Get('callback')
   async callback(
     @Query('code') code: string | undefined,
-    @Query('scope') scope: string | undefined,
     @Query('state') state: string | undefined,
+    @Res() res: HttpResponse,
   ) {
+    const frontendUrl = process.env.FRONTEND_URL ?? 'http://localhost:4200';
+
     if (!code) {
-      return {
-        ok: false,
-        message: 'No OAuth code found in callback request.',
-      };
+      return res.redirect(`${frontendUrl}/callback?error=no_code`);
     }
 
-    const result = await this.authService.handleOAuthCallback(code, scope, state);
-
-    return {
-      ok: true,
-      message: 'Google OAuth callback received by backend.',
-      oauth: result,
-    };
+    try {
+      const token = await this.authService.handleOAuthCallback(code, state);
+      return res.redirect(`${frontendUrl}/callback?access_token=${token}`);
+    } catch (err: unknown) {
+      const isBadRequest =
+        err instanceof Error && err.constructor.name === 'BadRequestException';
+      const errorCode = isBadRequest ? 'invalid_state' : 'exchange_failed';
+      return res.redirect(`${frontendUrl}/callback?error=${errorCode}`);
+    }
   }
 }

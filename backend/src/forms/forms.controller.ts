@@ -59,6 +59,7 @@ export class FormsController {
 
     const requests = mapDslToGoogleRequests(form);
     await this.googleForms.batchUpdate(accessToken, formId, requests);
+    await this.googleForms.patchFormSettings(accessToken, formId, form.settings);
 
     return { formId, formUrl };
   }

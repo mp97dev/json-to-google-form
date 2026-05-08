@@ -120,4 +120,58 @@ describe('mapDslToGoogleRequests', () => {
     const requests = mapDslToGoogleRequests(baseForm);
     expect(requests[0].createItem?.item.questionItem?.question.textQuestion?.paragraph).toBe(false);
   });
+
+  it('emits imageItem after a question with image media', () => {
+    const form: Form = {
+      ...baseForm,
+      pages: [
+        {
+          id: 'p1',
+          title: 'Page 1',
+          questions: [
+            {
+              id: 'q1',
+              type: 'short_answer',
+              title: 'Name?',
+              required: true,
+              media: { type: 'image', url: 'https://example.com/img.png' },
+            },
+          ],
+        },
+      ],
+    };
+    const requests = mapDslToGoogleRequests(form);
+    expect(requests).toHaveLength(2);
+    expect(requests[0].createItem?.item.questionItem).toBeDefined();
+    expect(requests[1].createItem?.item.imageItem?.image.sourceUri).toBe(
+      'https://example.com/img.png',
+    );
+    expect(requests[1].createItem?.location.index).toBe(1);
+  });
+
+  it('emits videoItem after a question with video media', () => {
+    const form: Form = {
+      ...baseForm,
+      pages: [
+        {
+          id: 'p1',
+          title: 'Page 1',
+          questions: [
+            {
+              id: 'q1',
+              type: 'short_answer',
+              title: 'Fav video?',
+              required: false,
+              media: { type: 'video', url: 'https://www.youtube.com/watch?v=abc' },
+            },
+          ],
+        },
+      ],
+    };
+    const requests = mapDslToGoogleRequests(form);
+    expect(requests).toHaveLength(2);
+    expect(requests[1].createItem?.item.videoItem?.video.youtubeUri).toBe(
+      'https://www.youtube.com/watch?v=abc',
+    );
+  });
 });

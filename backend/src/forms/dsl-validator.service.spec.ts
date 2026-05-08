@@ -86,4 +86,28 @@ describe('DslValidatorService', () => {
     const result = service.validateForm({ ...validForm, pages: [] });
     expect(result.valid).toBe(false);
   });
+
+  it('rejects media.type audio (not supported by Google Forms)', () => {
+    const form = {
+      ...validForm,
+      pages: [
+        {
+          id: 'p1',
+          title: 'Page 1',
+          questions: [
+            {
+              id: 'q1',
+              type: 'short_answer',
+              title: 'Listen?',
+              required: false,
+              media: { type: 'audio', url: 'https://example.com/audio.mp3' },
+            },
+          ],
+        },
+      ],
+    };
+    const result = service.validateForm(form);
+    expect(result.valid).toBe(false);
+    expect(result.errors.some((e) => e.includes('audio') || e.includes('media'))).toBe(true);
+  });
 });
