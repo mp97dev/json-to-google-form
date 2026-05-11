@@ -4,6 +4,27 @@ Target audience: Italian teachers. Primary language: Italian. Domain: `formulino
 
 ---
 
+## 0. Brand name situation: "Formulino" vs the Ferrari cat
+
+The name "Formulino" is strongly associated with the famous stray cat that lived at Ferrari's Maranello circuit and died in 2024. Searching for "formulino" currently returns the cat almost exclusively.
+
+**What this means in practice:**
+
+- Google hasn't yet built a distinct entity for the app — it simply hasn't seen enough signals.
+- Ranking for the bare keyword "formulino" will take months and depends on building authority. Do not chase it first.
+- Instead, dominate compound queries where the cat has zero presence: `formulino app`, `formulino google form`, `formulino crea form`, `formulino insegnanti`.
+
+**Brand name strategy:**
+
+1. Use "Formulino" as the first word in every title, heading, and structured data name — Google learns associations from repetition.
+2. In outreach posts (Facebook groups, Telegram, LinkedIn) always pair the name with the action: *"Con Formulino crei un Google Form in 30 secondi"*. This trains the web's co-occurrence graph.
+3. If you get mentions on external sites (blog posts, reviews, directories), ensure they link with anchor text "Formulino" or "Formulino app" — not just the URL.
+4. The FAQPage structured data now includes "Cos'è Formulino?" as the first question — this directly signals to Google that the name refers to a web application.
+
+Over 6–12 months of consistent presence, Google will build its own entity understanding of Formulino as a software tool alongside the cat. You are not competing with the cat for emotional resonance — you are carving out a distinct entity in Google's knowledge graph.
+
+---
+
 ## 1. Foundation (one-time setup)
 
 These are prerequisites. Without them, all other work has reduced effect.
@@ -12,11 +33,14 @@ These are prerequisites. Without them, all other work has reduced effect.
 
 - [x] `<title>` and `<meta name="description">` set in `frontend/src/index.html`
 - [x] Canonical URL: `https://formulino.ginkgo3d.it/`
-- [x] Open Graph and Twitter Card tags
+- [x] Open Graph and Twitter Card tags (`summary_large_image`)
 - [x] `robots.txt` at `/robots.txt`
-- [x] `sitemap.xml` at `/sitemap.xml`
-- [x] Schema.org `WebApplication` structured data
+- [x] `sitemap.xml` at `/sitemap.xml` (with `lastmod` dates)
+- [x] Schema.org `WebApplication` structured data (expanded: audience, featureList, inLanguage, isAccessibleForFree)
+- [x] Schema.org `FAQPage` structured data (5 questions in Italian)
+- [x] Crawler-visible static HTML inside `<app-root>` (h1, description, FAQ `<dl>`)
 - [x] `lang="it"` on `<html>`
+- [x] `<meta name="application-name">` set
 - [x] Google Search Console verification tag
 
 ### 1.2 Google Search Console
@@ -60,15 +84,13 @@ The current hero tagline is driven by the i18n service (`appTagline` key). Consi
 
 The description copy should reference the teacher use case explicitly, not just the technical functionality.
 
-### 2.3 Add an FAQ section (future)
+### 2.3 FAQ section — done
 
-Search engines surface FAQ rich results. A short Italian FAQ on the homepage would help:
+The homepage now has crawler-visible FAQ content in the static HTML (`<app-root>`) and `FAQPage` JSON-LD structured data in `<head>`. Five questions in Italian covering: cos'è Formulino, è gratuito, come funziona, serve un account Google, tipi di domande.
 
-- "Come creo un Google Form con Formulino?"
-- "Formulino è gratuito?"
-- "Serve un account Google?"
+Google may surface FAQ rich results in SERP once the page is indexed and the structured data is validated. Check **Search Console → Rich Results** after the next crawl.
 
-Add `FAQPage` structured data when this section is built.
+Next step: add a visible FAQ accordion to the Angular app so the content is present after JS loads too (improves eligibility for rich results).
 
 ---
 

@@ -40,6 +40,16 @@ server {
     proxy_set_header X-Forwarded-Proto $scheme;
   }
 
+  location = /sitemap.xml {
+    add_header Content-Type "application/xml";
+    try_files $uri =404;
+  }
+
+  location = /robots.txt {
+    add_header Content-Type "text/plain";
+    try_files $uri =404;
+  }
+
   location = /privacy {
     root /srv/frontend;
     try_files /privacy/index.html =404;

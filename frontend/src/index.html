@@ -24,8 +24,11 @@
     <meta property="og:locale:alternate" content="en_US" />
     <meta property="og:site_name" content="Formulino" />
 
+    <!-- Application name (shown in browser UI / add-to-homescreen) -->
+    <meta name="application-name" content="Formulino" />
+
     <!-- Twitter / X Card -->
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://formulino.ginkgo3d.it/" />
     <meta name="twitter:title" content="Formulino – Crea Google Form con il tuo assistente AI" />
     <meta name="twitter:description" content="Usa il tuo assistente AI per creare Google Form in secondi. Ideale per insegnanti — verifiche, sondaggi e questionari senza sforzo." />
@@ -50,21 +53,106 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Formulino",
-      "url": "https://formulino.ginkgo3d.it",
-      "description": "Usa il tuo assistente AI per creare Google Form in secondi. Ideale per insegnanti.",
-      "applicationCategory": "EducationApplication",
-      "operatingSystem": "Web",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
-      "author": { "@type": "Person", "name": "Michele Pasetto" }
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Formulino",
+          "alternateName": "Formulino – Crea Google Form con AI",
+          "url": "https://formulino.ginkgo3d.it",
+          "description": "Usa il tuo assistente AI per creare Google Form in secondi. Ideale per insegnanti italiani — verifiche, quiz e sondaggi senza sforzo.",
+          "applicationCategory": "EducationApplication",
+          "operatingSystem": "Web",
+          "inLanguage": "it",
+          "isAccessibleForFree": true,
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+          "author": { "@type": "Person", "name": "Michele Pasetto" },
+          "audience": {
+            "@type": "EducationalAudience",
+            "educationalRole": "teacher"
+          },
+          "featureList": [
+            "Creazione automatica di Google Form",
+            "Integrazione con ChatGPT, Claude e Gemini",
+            "Validazione JSON in tempo reale",
+            "Supporto quiz con punteggio e sondaggi",
+            "Interfaccia in italiano e inglese",
+            "Completamente gratuito"
+          ],
+          "keywords": "formulino, google form, crea google form con AI, insegnanti, verifica scolastica, questionario AI"
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Cos'è Formulino?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Formulino è un'app web gratuita che permette agli insegnanti di creare Google Form in pochi secondi usando l'intelligenza artificiale. Si descrive il form al proprio assistente AI (ChatGPT, Claude o Gemini) e si incolla la risposta su Formulino: il Google Form viene creato automaticamente."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Formulino è gratuito?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Sì, Formulino è completamente gratuito. Non è richiesta nessuna registrazione. Serve solo un account Google per creare i form nel proprio Google Drive."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Come funziona Formulino?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Con Formulino si creano Google Form in tre passi: si descrive il form al proprio assistente AI (ChatGPT, Claude o Gemini), si copia la risposta, la si incolla su Formulino e si clicca 'Crea Form'. Il Google Form viene generato automaticamente nell'account Google dell'utente."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Serve un account Google per usare Formulino?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Sì, per creare i Google Form è necessario accedere con un account Google. L'accesso permette a Formulino di creare il form direttamente nel Google Drive dell'utente."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Quali tipi di domande posso creare con Formulino?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Formulino supporta tutti i principali tipi di domanda disponibili in Google Form: risposta multipla, risposta aperta, vero/falso e altro. È possibile creare verifiche scolastiche, quiz con punteggio automatico e sondaggi per la classe."
+              }
+            }
+          ]
+        }
+      ]
     }
     </script>
   </head>
   <body>
     <app-root>
-      <!-- Crawler-visible privacy link; Angular replaces this with its own footer once JS loads -->
-      <a href="/privacy" style="display:block;text-align:center;padding:1rem;color:#8b949e;font-size:.82rem;text-decoration:none;">Privacy Policy</a>
+      <!-- Static fallback: visible to crawlers and before Angular bootstraps.
+           Angular replaces the entire app-root content on load. -->
+      <div style="max-width:720px;margin:2rem auto;padding:1rem 1.5rem;font-family:system-ui,sans-serif;color:#e6edf3;background:#0d1117;border-radius:8px;">
+        <h1 style="font-size:1.6rem;margin-bottom:.5rem;">Formulino – Crea Google Form con il tuo assistente AI</h1>
+        <p style="color:#8b949e;margin-bottom:1.5rem;">Descrivi il form al tuo assistente AI (ChatGPT, Claude, Gemini), incolla la risposta su Formulino e il tuo Google Form è pronto in secondi. Ideale per insegnanti: verifiche, quiz e sondaggi senza sforzo.</p>
+        <section>
+          <h2 style="font-size:1.1rem;margin-bottom:.75rem;">Domande frequenti</h2>
+          <dl style="margin:0;">
+            <dt style="font-weight:600;margin-top:1rem;">Cos'è Formulino?</dt>
+            <dd style="margin:.25rem 0 0 0;color:#8b949e;">Formulino è un'app gratuita che permette agli insegnanti di creare Google Form in pochi secondi usando l'intelligenza artificiale.</dd>
+            <dt style="font-weight:600;margin-top:1rem;">Formulino è gratuito?</dt>
+            <dd style="margin:.25rem 0 0 0;color:#8b949e;">Sì, è completamente gratuito. Serve solo un account Google per creare i form.</dd>
+            <dt style="font-weight:600;margin-top:1rem;">Come funziona Formulino?</dt>
+            <dd style="margin:.25rem 0 0 0;color:#8b949e;">Descrivi il form al tuo assistente AI, copia la risposta, incollala su Formulino e clicca "Crea Form". Il Google Form viene creato automaticamente nel tuo account Google.</dd>
+            <dt style="font-weight:600;margin-top:1rem;">Serve un account Google?</dt>
+            <dd style="margin:.25rem 0 0 0;color:#8b949e;">Sì, è necessario accedere con Google per creare i form direttamente nel tuo Google Drive.</dd>
+            <dt style="font-weight:600;margin-top:1rem;">Quali tipi di domande posso creare?</dt>
+            <dd style="margin:.25rem 0 0 0;color:#8b949e;">Risposta multipla, risposta aperta, vero/falso e altri tipi disponibili in Google Form. Puoi creare verifiche, quiz con punteggio e sondaggi per la classe.</dd>
+          </dl>
+        </section>
+        <a href="/privacy" style="display:block;margin-top:2rem;color:#8b949e;font-size:.82rem;text-decoration:none;">Privacy Policy</a>
+      </div>
     </app-root>
   </body>
 </html>
