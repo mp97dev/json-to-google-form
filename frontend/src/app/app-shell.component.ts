@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { I18nService } from './services/i18n.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,8 @@ import { I18nService } from './services/i18n.service';
       <a routerLink="/privacy">{{ i18n.lang() === 'it' ? 'Informativa sulla privacy' : 'Privacy Policy' }}</a>
       <span class="footer-sep">·</span>
       <a href="https://ko-fi.com/M4M61ZCX4J" target="_blank" rel="noopener">{{ i18n.lang() === 'it' ? 'Offrimi un caffè ☕' : 'Buy me a coffee ☕' }}</a>
+      <span class="footer-sep">·</span>
+      <span class="footer-version">v{{ version }}</span>
     </footer>
   `,
   styles: [`
@@ -98,8 +101,14 @@ import { I18nService } from './services/i18n.service';
       color: var(--border);
       margin: 0 .5rem;
     }
+
+    .footer-version {
+      color: var(--text-secondary);
+      font-size: .82rem;
+    }
   `],
 })
 export class AppShellComponent {
+  readonly version = environment.version;
   constructor(readonly i18n: I18nService) {}
 }

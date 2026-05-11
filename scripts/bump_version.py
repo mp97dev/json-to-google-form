@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import re
 from pathlib import Path
 import subprocess
 
@@ -34,8 +35,20 @@ def main() -> int:
 
     version_file.write_text(f"{next_version}\n", encoding="utf-8")
     print(f"Updated VERSION: {current} -> {next_version}")
-    # Aggiungi VERSION allo staging
     subprocess.run(["git", "add", "VERSION"], check=True)
+
+    env_files = [
+        Path("frontend/src/environments/environment.ts"),
+        Path("frontend/src/environments/environment.production.ts"),
+    ]
+    for env_file in env_files:
+        text = env_file.read_text(encoding="utf-8")
+        updated = re.sub(r"version:\s*'[^']*'", f"version: '{next_version}'", text)
+        if updated != text:
+            env_file.write_text(updated, encoding="utf-8")
+            subprocess.run(["git", "add", str(env_file)], check=True)
+            print(f"Updated version in {env_file}")
+
     return 0
 
 
