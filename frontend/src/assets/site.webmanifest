@@ -1,7 +1,7 @@
 {
-  "name": "JSON → Google Form",
-  "short_name": "JSON→Form",
-  "description": "Create Google Forms from JSON using AI",
+  "name": "Formulino",
+  "short_name": "Formulino",
+  "description": "Usa il tuo assistente AI per creare Google Form in secondi",
   "icons": [
     {
       "src": "/assets/web-app-manifest-192x192.png",

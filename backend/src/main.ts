@@ -13,8 +13,8 @@ async function bootstrap() {
   });
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('JSON to Google Form API')
-    .setDescription('Validate and create Google Forms from a JSON DSL')
+    .setTitle('Formulino API')
+    .setDescription('Valida e crea Google Form da un DSL JSON — Formulino')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

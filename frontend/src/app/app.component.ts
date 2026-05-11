@@ -314,7 +314,7 @@ Rules: pages sequential only; options required for multiple_choice/checkbox/drop
   ) {}
 
   ngOnInit(): void {
-    this.title.setTitle('JSON → Google Form');
+    this.title.setTitle('Formulino – Crea Google Form con il tuo assistente AI');
     const pending = sessionStorage.getItem('pending_dsl');
     if (pending) {
       this.dslJson = pending;

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://json-to-google-form.dev/schema/form.v1.schema.json",
+  "$id": "https://formulino.ginkgo3d.it/schema/form.v1.schema.json",
   "title": "Form DSL v1",
   "type": "object",
   "required": ["id", "title", "description", "mode", "settings", "pages"],

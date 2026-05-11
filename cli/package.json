@@ -1,5 +1,5 @@
 {
-  "name": "@json-to-google-form/cli",
+  "name": "@formulino/cli",
   "version": "0.1.0",
   "private": true,
   "type": "commonjs",

@@ -1,6 +1,6 @@
 # Deploy Guide: Railway (Single Service)
 
-This guide walks through deploying json-to-google-form on Railway from scratch.
+This guide walks through deploying Formulino on Railway from scratch.
 The deployment is a single container: Nginx serves the Angular frontend and proxies
 `/api/*` traffic to the NestJS backend running on an internal port.
 
@@ -64,13 +64,13 @@ Google OAuth callback URL must therefore include this prefix.
 1. Go to **APIs & Services → Credentials**.
 2. Click **Create Credentials → OAuth client ID**.
 3. Application type: **Web application**.
-4. Name: anything (e.g. `json-to-google-form-railway`).
+4. Name: anything (e.g. `formulino-railway`).
 5. Under **Authorized redirect URIs**, add:
    ```
    https://<your-railway-domain>/api/auth/google/callback
    ```
    Replace `<your-railway-domain>` with the public domain Railway assigns
-   (e.g. `json-to-google-form.up.railway.app`). You can come back and add it
+   (e.g. `<your-app>.up.railway.app`). You can come back and add it
    after the Railway service is created if you do not know it yet.
 6. Click **Create**.
 7. Copy the **Client ID** and **Client Secret** — you will need them in Step 3.
@@ -91,7 +91,7 @@ Google OAuth callback URL must therefore include this prefix.
 5. Click **Deploy** — Railway will build the Docker image and start the container.
    The first build takes approximately 3–5 minutes.
 6. Once deployed, go to **Settings → Networking** and note the public domain
-   (e.g. `json-to-google-form.up.railway.app`).
+   (e.g. `<your-app>.up.railway.app`).
 
 ---
 
@@ -170,7 +170,7 @@ Then open `https://<your-railway-domain>` in a browser:
 Build and run the same image locally before pushing to Railway:
 
 ```bash
-docker build -t json-to-google-form:local .
+docker build -t formulino:local .
 
 docker run --rm -p 8080:8080 \
   -e GOOGLE_CLIENT_ID="<your-client-id>" \
@@ -178,7 +178,7 @@ docker run --rm -p 8080:8080 \
   -e GOOGLE_REDIRECT_URI="http://localhost:8080/api/auth/google/callback" \
   -e FRONTEND_URL="http://localhost:8080" \
   -e CORS_ORIGIN="http://localhost:8080" \
-  json-to-google-form:local
+  formulino:local
 ```
 
 Then open:

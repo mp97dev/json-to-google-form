@@ -10,7 +10,7 @@ import { I18nService } from './services/i18n.service';
     <header class="app-header">
       <a routerLink="/" class="app-name">
         <img src="assets/ginkgo.png" alt="Ginkgo logo" class="app-logo" />
-        JSON &rarr; Google Form
+        Formulino
       </a>
       <button type="button" class="lang-toggle" (click)="i18n.toggle()">
         {{ i18n.lang() === 'it' ? 'EN' : 'IT' }}

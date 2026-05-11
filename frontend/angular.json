@@ -29,6 +29,16 @@
                 "glob": "index.html",
                 "input": "src/privacy",
                 "output": "privacy"
+              },
+              {
+                "glob": "robots.txt",
+                "input": "src",
+                "output": "/"
+              },
+              {
+                "glob": "sitemap.xml",
+                "input": "src",
+                "output": "/"
               }
             ],
             "styles": ["src/styles.css"],

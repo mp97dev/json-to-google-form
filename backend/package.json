@@ -1,5 +1,5 @@
 {
-  "name": "@json-to-google-form/backend",
+  "name": "@formulino/backend",
   "version": "0.1.0",
   "private": true,
   "type": "commonjs",
