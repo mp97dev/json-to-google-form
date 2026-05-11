@@ -19,6 +19,8 @@ import { I18nService } from './services/i18n.service';
     <router-outlet />
     <footer class="app-footer">
       <a routerLink="/privacy">{{ i18n.lang() === 'it' ? 'Informativa sulla privacy' : 'Privacy Policy' }}</a>
+      <span class="footer-sep">·</span>
+      <a href="https://ko-fi.com/M4M61ZCX4J" target="_blank" rel="noopener">{{ i18n.lang() === 'it' ? 'Offrimi un caffè ☕' : 'Buy me a coffee ☕' }}</a>
     </footer>
   `,
   styles: [`
@@ -90,6 +92,11 @@ import { I18nService } from './services/i18n.service';
     .app-footer a:hover {
       color: var(--accent);
       text-decoration: underline;
+    }
+
+    .footer-sep {
+      color: var(--border);
+      margin: 0 .5rem;
     }
   `],
 })
