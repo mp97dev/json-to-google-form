@@ -8,6 +8,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 import { DslValidatorService } from './dsl-validator.service';
 import { GoogleFormsService } from './google-forms.service';
 import { mapDslToGoogleRequests } from './mapper.service';
@@ -31,6 +32,7 @@ export class FormsController {
 
   @Post('create')
   @HttpCode(201)
+  @Throttle({ default: { ttl: 60_000, limit: 5 } })
   @ApiOperation({ summary: 'Create a Google Form from a DSL payload' })
   @ApiHeader({ name: 'Authorization', description: 'Bearer <google_access_token>' })
   @ApiResponse({ status: 201, description: 'Form created successfully' })

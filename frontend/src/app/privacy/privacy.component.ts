@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router';
   template: `
     <main class="privacy">
       <h1>Privacy Policy</h1>
-      <p class="updated">Last updated: May 8, 2026</p>
+      <p class="updated">Last updated: May 14, 2026</p>
 
       <section>
         <h2>What this app does</h2>
@@ -23,7 +23,7 @@ import { RouterLink } from '@angular/router';
         <h2>Data we collect</h2>
         <ul>
           <li><strong>Google account info</strong> — your name and email, provided by Google during sign-in, used only to authenticate your session.</li>
-          <li><strong>OAuth tokens</strong> — stored in your browser session to make API calls to Google on your behalf. They are never sent to or stored on our servers beyond the duration of the request.</li>
+          <li><strong>OAuth access token</strong> — after you authorise Formulino, Google issues a short-lived access token. It is delivered to your browser via a URL fragment (the <code>#…</code> part of the address bar), which browsers never transmit to servers or record in server logs. The token is stored in your browser's <code>sessionStorage</code> for the duration of your tab session and is cleared when the tab is closed. It is sent to our server only inside the <code>Authorization</code> request header when creating a form, and is not logged or stored server-side.</li>
           <li><strong>JSON input</strong> — the JSON you paste into the editor is sent to our server only to create the form via the Google Forms API. We do not log or store it.</li>
         </ul>
       </section>

@@ -57,7 +57,7 @@
                   "additionalProperties": false,
                   "properties": {
                     "type": { "type": "string", "enum": ["image", "video"] },
-                    "url": { "type": "string", "format": "uri" }
+                    "url": { "type": "string", "format": "uri", "pattern": "^https://" }
                   }
                 },
                 "metadata": {

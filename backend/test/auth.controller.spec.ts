@@ -43,7 +43,7 @@ describe('AuthController', () => {
 
       await controller.callback('auth-code', 'valid-state', res);
 
-      expect(res.url).toBe('http://localhost:4200/callback?access_token=tok-abc');
+      expect(res.url).toBe('http://localhost:4200/callback#access_token=tok-abc');
     });
 
     it('redirects to error=no_code when code is absent', async () => {
@@ -79,7 +79,7 @@ describe('AuthController', () => {
 
       await controller.callback('code', 'state', res);
 
-      expect(res.url).toBe('http://localhost:4200/callback?access_token=tok-xyz');
+      expect(res.url).toBe('http://localhost:4200/callback#access_token=tok-xyz');
     });
   });
 });

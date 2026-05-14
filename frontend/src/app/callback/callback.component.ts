@@ -19,19 +19,24 @@ export class CallbackComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe((params) => {
-      const token = params.get('access_token');
-      const code = params.get('code');
+    // Token arrives in the URL fragment (#access_token=…) — never sent to servers or logged.
+    const hash = new URLSearchParams(window.location.hash.slice(1));
+    const token = hash.get('access_token');
 
-      if (token) {
-        sessionStorage.setItem('access_token', token);
-        void this.router.navigate(['/']);
-      } else if (code) {
-        // Backend handles code exchange server-side; token should have been returned
-        this.message = 'Authentication code received but no token returned. Check backend configuration.';
-      } else {
-        this.message = 'Authentication failed. No token or code received.';
-      }
+    if (token) {
+      sessionStorage.setItem('access_token', token);
+      // Clear fragment so the token doesn't linger in browser history.
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+      void this.router.navigate(['/']);
+      return;
+    }
+
+    // Backend error codes arrive as query params (?error=…).
+    this.route.queryParamMap.subscribe((params) => {
+      const error = params.get('error');
+      this.message = error
+        ? `Authentication failed: ${error}`
+        : 'Authentication failed. No token received.';
     });
   }
 }

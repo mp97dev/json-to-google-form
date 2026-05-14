@@ -10,13 +10,23 @@ server {
   gzip_types text/plain text/css application/javascript application/json image/svg+xml;
   gzip_min_length 1024;
 
-  # Security headers
+  # Security headers applied at server level.
+  # IMPORTANT: repeated inside every child location block that uses add_header,
+  # because nginx replaces (not appends) parent add_header directives in child blocks.
   add_header X-Content-Type-Options "nosniff" always;
   add_header X-Frame-Options "SAMEORIGIN" always;
   add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+  add_header Permissions-Policy "geolocation=(), microphone=(), camera=()" always;
+  add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self'; frame-src https://ko-fi.com; font-src 'self'" always;
 
-  # Cache hashed static assets aggressively
+  # Cache hashed static assets aggressively.
+  # Security headers repeated here — nginx child add_header replaces parent headers.
   location ~* \.(js|css|woff2?|ttf|eot|svg|png|jpg|gif|ico)$ {
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "geolocation=(), microphone=(), camera=()" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self'; frame-src https://ko-fi.com; font-src 'self'" always;
     expires 1y;
     add_header Cache-Control "public, immutable";
     try_files $uri =404;

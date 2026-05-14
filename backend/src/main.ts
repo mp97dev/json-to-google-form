@@ -12,14 +12,16 @@ async function bootstrap() {
     credentials: true,
   });
 
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('Formulino API')
-    .setDescription('Valida e crea Google Form da un DSL JSON — Formulino')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api/docs', app, document);
+  if (process.env.NODE_ENV !== 'production') {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle('Formulino API')
+      .setDescription('Valida e crea Google Form da un DSL JSON — Formulino')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('api/docs', app, document);
+  }
 
   // Usa sempre BACKEND_PORT (default 3000), ignora process.env.PORT per evitare conflitto con nginx/Railway
   const port = Number(process.env.BACKEND_PORT ?? 3000);

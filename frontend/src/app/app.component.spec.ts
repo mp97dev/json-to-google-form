@@ -1,4 +1,5 @@
 import { of, throwError } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { FormsService } from './services/forms.service';
 import { I18nService } from './services/i18n.service';
@@ -12,6 +13,7 @@ const mockSessionStorage = {
 };
 
 const mockClipboard = { writeText: jest.fn().mockResolvedValue(undefined) };
+const mockTitle = { setTitle: jest.fn() };
 
 beforeAll(() => {
   Object.defineProperty(global, 'sessionStorage', { value: mockSessionStorage, configurable: true });
@@ -38,6 +40,7 @@ describe('AppComponent', () => {
     comp = new AppComponent(
       svc as unknown as FormsService,
       makeI18n() as unknown as I18nService,
+      mockTitle as unknown as Title,
     );
     mockSessionStorage.clear();
   });

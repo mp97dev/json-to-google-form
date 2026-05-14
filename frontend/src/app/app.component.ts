@@ -804,14 +804,9 @@ Rules: pages sequential only; options required for multiple_choice/checkbox/drop
     try {
       return JSON.parse(cleaned);
     } catch {
-      // Try base64 decode (in case AI encoded the output)
-      try {
-        return JSON.parse(atob(cleaned));
-      } catch {
-        this.errors = [this.i18n.t('invalidJson')];
-        this.state = 'error';
-        return null;
-      }
+      this.errors = [this.i18n.t('invalidJson')];
+      this.state = 'error';
+      return null;
     }
   }
 

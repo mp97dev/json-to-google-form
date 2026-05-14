@@ -28,7 +28,7 @@ export class AuthController {
 
     try {
       const token = await this.authService.handleOAuthCallback(code, state);
-      return res.redirect(`${frontendUrl}/callback?access_token=${token}`);
+      return res.redirect(`${frontendUrl}/callback#access_token=${token}`);
     } catch (err: unknown) {
       const isBadRequest =
         err instanceof Error && err.constructor.name === 'BadRequestException';
