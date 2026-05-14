@@ -8,6 +8,9 @@ import { environment } from '../environments/environment';
   standalone: true,
   imports: [RouterOutlet, RouterLink],
   template: `
+    <span class="blob blob-1" aria-hidden="true"></span>
+    <span class="blob blob-2" aria-hidden="true"></span>
+    <span class="blob blob-3" aria-hidden="true"></span>
     <header class="app-header">
       <a routerLink="/" class="app-name">
         <img src="assets/ginkgo.png" alt="Ginkgo logo" class="app-logo" />

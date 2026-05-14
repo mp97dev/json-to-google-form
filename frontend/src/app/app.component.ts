@@ -112,7 +112,7 @@ const STEP_ORDER: WizardStep[] = ['step1', 'step2', 'step3', 'step4', 'done'];
 
       <textarea
         [(ngModel)]="dslJson"
-        rows="10"
+        rows="7"
         [placeholder]="i18n.t('wizardStep3Placeholder')"
         [disabled]="isWorking"
         (paste)="onPaste()"
@@ -216,29 +216,29 @@ const STEP_ORDER: WizardStep[] = ['step1', 'step2', 'step3', 'step4', 'done'];
       display: block;
       max-width: 680px;
       margin: 0 auto;
-      padding: 2rem 1rem 5rem;
+      padding: 1rem 1rem 3rem;
     }
 
     /* ── Hero ── */
     .hero {
       text-align: center;
-      padding: 2rem 0 .5rem;
+      padding: .6rem 0 0;
     }
 
     .hero h1 {
-      font-size: clamp(1.5rem, 4vw, 2.2rem);
-      color: var(--text-primary);
-      margin: 0 0 .6rem;
-      font-weight: 700;
-      letter-spacing: -.02em;
-      line-height: 1.2;
+      font-size: clamp(.95rem, 2.2vw, 1.2rem);
+      color: var(--text-secondary);
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .hero-desc {
-      color: var(--text-secondary);
-      font-size: .95rem;
-      margin: 0;
-      line-height: 1.65;
+      display: none;
     }
 
     /* ── Step card ── */
@@ -246,19 +246,19 @@ const STEP_ORDER: WizardStep[] = ['step1', 'step2', 'step3', 'step4', 'done'];
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 1.75rem 1.75rem 1.5rem;
-      margin-top: 1.5rem;
-      animation: stepIn 220ms ease;
+      padding: 1.1rem 1.25rem 1.1rem;
+      margin-top: .85rem;
+      animation: stepIn 200ms ease;
     }
 
     @keyframes stepIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
     .step-badge {
-      margin: 0 0 .6rem;
-      font-size: .7rem;
+      margin: 0 0 .25rem;
+      font-size: .68rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .1em;
@@ -266,18 +266,18 @@ const STEP_ORDER: WizardStep[] = ['step1', 'step2', 'step3', 'step4', 'done'];
     }
 
     .step-card h2 {
-      font-size: clamp(1.15rem, 3vw, 1.45rem);
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
       font-weight: 700;
       color: var(--text-primary);
-      margin: 0 0 .65rem;
+      margin: 0 0 .4rem;
       line-height: 1.25;
     }
 
     .step-desc {
       color: var(--text-secondary);
-      font-size: .92rem;
-      line-height: 1.65;
-      margin: 0 0 1rem;
+      font-size: .87rem;
+      line-height: 1.55;
+      margin: 0 0 .6rem;
     }
 
     /* ── Buttons ── */
@@ -330,31 +330,31 @@ const STEP_ORDER: WizardStep[] = ['step1', 'step2', 'step3', 'step4', 'done'];
 
     .step-cta {
       width: 100%;
-      padding: .85rem;
-      font-size: 1rem;
-      margin-top: 1.25rem;
+      padding: .7rem;
+      font-size: .95rem;
+      margin-top: .85rem;
       border-radius: 10px;
     }
 
     .actions-row {
       display: flex;
       align-items: center;
-      gap: .6rem;
-      margin-top: 1.25rem;
+      gap: .5rem;
+      margin-top: .85rem;
       flex-wrap: wrap;
     }
 
     .step-cta-inline {
       margin-left: auto;
-      padding: .6rem 1.4rem;
+      padding: .55rem 1.25rem;
     }
 
     .copy-prompt-btn {
       display: block;
       width: 100%;
-      padding: .85rem;
-      font-size: .95rem;
-      margin: 1rem 0 0;
+      padding: .7rem;
+      font-size: .9rem;
+      margin: .6rem 0 0;
       border-radius: 10px;
       border-color: var(--accent);
       color: var(--accent);
@@ -371,20 +371,20 @@ const STEP_ORDER: WizardStep[] = ['step1', 'step2', 'step3', 'step4', 'done'];
       border: 1px solid var(--border);
       border-radius: 10px;
       overflow: hidden;
-      margin: 1.25rem 0;
+      margin: .6rem 0;
     }
 
     .chat-titlebar {
       background: #1c2230;
-      padding: .5rem .75rem;
+      padding: .35rem .65rem;
       display: flex;
       align-items: center;
       gap: .35rem;
     }
 
     .chat-dot {
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       flex-shrink: 0;
     }
@@ -395,22 +395,22 @@ const STEP_ORDER: WizardStep[] = ['step1', 'step2', 'step3', 'step4', 'done'];
 
     .chat-app-name {
       margin-left: .4rem;
-      font-size: .72rem;
+      font-size: .7rem;
       color: var(--text-secondary);
     }
 
     .chat-messages {
-      padding: .85rem;
+      padding: .6rem;
       display: flex;
       flex-direction: column;
-      gap: .65rem;
+      gap: .4rem;
     }
 
     .chat-bubble {
-      padding: .6rem .9rem;
-      border-radius: 14px;
-      font-size: .83rem;
-      line-height: 1.5;
+      padding: .4rem .75rem;
+      border-radius: 12px;
+      font-size: .78rem;
+      line-height: 1.45;
       max-width: 88%;
       white-space: pre-line;
     }
@@ -419,7 +419,7 @@ const STEP_ORDER: WizardStep[] = ['step1', 'step2', 'step3', 'step4', 'done'];
       background: var(--accent);
       color: #0d1117;
       align-self: flex-end;
-      border-bottom-right-radius: 4px;
+      border-bottom-right-radius: 3px;
     }
 
     .chat-bubble.ai {
@@ -427,21 +427,21 @@ const STEP_ORDER: WizardStep[] = ['step1', 'step2', 'step3', 'step4', 'done'];
       border: 1px solid var(--border);
       color: var(--text-primary);
       align-self: flex-start;
-      border-bottom-left-radius: 4px;
+      border-bottom-left-radius: 3px;
     }
 
     /* ── Help toggle ── */
     .help-toggle {
       width: 100%;
       text-align: left;
-      padding: .5rem .75rem;
-      font-size: .82rem;
+      padding: .38rem .65rem;
+      font-size: .78rem;
       font-weight: 500;
       color: var(--text-secondary);
       border: 1px dashed var(--border);
       border-radius: 8px;
       cursor: pointer;
-      margin-top: .25rem;
+      margin-top: .15rem;
     }
 
     .help-toggle:hover:not([disabled]) {
@@ -477,8 +477,8 @@ const STEP_ORDER: WizardStep[] = ['step1', 'step2', 'step3', 'step4', 'done'];
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: .4rem;
-      margin: 1.1rem 0 .5rem;
+      gap: .35rem;
+      margin: .6rem 0 .25rem;
     }
 
     .micro-step {
@@ -566,18 +566,18 @@ const STEP_ORDER: WizardStep[] = ['step1', 'step2', 'step3', 'step4', 'done'];
     .permissions-list {
       display: flex;
       flex-direction: column;
-      gap: .65rem;
-      margin: 1rem 0;
+      gap: .45rem;
+      margin: .6rem 0;
     }
 
     .perm-item {
       display: flex;
       align-items: flex-start;
-      gap: .75rem;
+      gap: .65rem;
       background: rgba(88, 166, 255, .05);
       border: 1px solid rgba(88, 166, 255, .15);
       border-radius: 10px;
-      padding: .75rem 1rem;
+      padding: .6rem .85rem;
     }
 
     .perm-icon {
@@ -601,7 +601,7 @@ const STEP_ORDER: WizardStep[] = ['step1', 'step2', 'step3', 'step4', 'done'];
 
     /* ── Google consent details ── */
     .consent-details {
-      margin: .75rem 0;
+      margin: .5rem 0;
       border: 1px solid var(--border);
       border-radius: 10px;
       overflow: hidden;
