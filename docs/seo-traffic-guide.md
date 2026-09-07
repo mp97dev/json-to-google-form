@@ -1,6 +1,6 @@
 # SEO & Traffic Guide — Formulino
 
-Target audience: Italian teachers. Primary language: Italian. Domain: `formulino.ginkgo3d.it`.
+Target audience: Italian teachers. Primary language: Italian. Domain: `formulino.michelepasetto.it`.
 
 ---
 
@@ -32,7 +32,7 @@ These are prerequisites. Without them, all other work has reduced effect.
 ### 1.1 Technical baseline — already done
 
 - [x] `<title>` and `<meta name="description">` set in `frontend/src/index.html`
-- [x] Canonical URL: `https://formulino.ginkgo3d.it/`
+- [x] Canonical URL: `https://formulino.michelepasetto.it/`
 - [x] Open Graph and Twitter Card tags (`summary_large_image`)
 - [x] `robots.txt` at `/robots.txt`
 - [x] `sitemap.xml` at `/sitemap.xml` (with `lastmod` dates)
@@ -46,18 +46,18 @@ These are prerequisites. Without them, all other work has reduced effect.
 ### 1.2 Google Search Console
 
 1. Go to [search.google.com/search-console](https://search.google.com/search-console)
-2. Add property → **URL prefix** → `https://formulino.ginkgo3d.it`
+2. Add property → **URL prefix** → `https://formulino.michelepasetto.it`
 3. Verify ownership using the meta tag already in `index.html`
-4. Go to **Sitemaps** → submit `https://formulino.ginkgo3d.it/sitemap.xml`
+4. Go to **Sitemaps** → submit `https://formulino.michelepasetto.it/sitemap.xml`
 5. Check **Coverage** tab weekly — fix any "Excluded" or "Error" URLs
 
 ### 1.3 Validate structured data
 
-Paste the source of `https://formulino.ginkgo3d.it` into [validator.schema.org](https://validator.schema.org) and confirm the `WebApplication` entity is parsed without errors.
+Paste the source of `https://formulino.michelepasetto.it` into [validator.schema.org](https://validator.schema.org) and confirm the `WebApplication` entity is parsed without errors.
 
 ### 1.4 PageSpeed / Core Web Vitals
 
-Run [pagespeed.web.dev](https://pagespeed.web.dev) on `https://formulino.ginkgo3d.it`.
+Run [pagespeed.web.dev](https://pagespeed.web.dev) on `https://formulino.michelepasetto.it`.
 Target: LCP < 2.5 s, CLS < 0.1, INP < 200 ms.
 
 The Nginx config already sets aggressive caching headers for static assets — the main risk is LCP on first load. Check if the icon images (`ginkgo.png`, `web-app-manifest-512x512.png`) are optimised (WebP preferred).
@@ -154,8 +154,8 @@ Long-tail (teacher-specific):
 
 - [ ] Images: convert `ginkgo.png` and manifest icons to WebP
 - [ ] Check that Nginx is sending `Cache-Control: public, immutable` for hashed JS/CSS bundles (already configured)
-- [ ] Verify `robots.txt` at `https://formulino.ginkgo3d.it/robots.txt` returns 200 after deploy
-- [ ] Verify `sitemap.xml` at `https://formulino.ginkgo3d.it/sitemap.xml` returns 200 after deploy
+- [ ] Verify `robots.txt` at `https://formulino.michelepasetto.it/robots.txt` returns 200 after deploy
+- [ ] Verify `sitemap.xml` at `https://formulino.michelepasetto.it/sitemap.xml` returns 200 after deploy
 - [ ] Check that `<link rel="canonical">` matches the actual URL (no trailing slash inconsistency)
 
 ---

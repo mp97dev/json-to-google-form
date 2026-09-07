@@ -21,12 +21,11 @@ export class AuthService {
     const clientId = this.getRequiredEnv('GOOGLE_CLIENT_ID');
     const redirectUri = this.getRequiredEnv('GOOGLE_REDIRECT_URI');
 
-    const scopes = [
-      'openid',
-      'email',
-      'profile',
-      'https://www.googleapis.com/auth/forms.body',
-    ];
+    // Only the forms.body scope is requested: it's the only one the backend
+    // reads or uses. openid/email/profile and an offline (refresh-token)
+    // grant were previously requested but never consumed — dropped per the
+    // GDPR data-minimisation principle (Art. 5(1)(c)).
+    const scopes = ['https://www.googleapis.com/auth/forms.body'];
 
     this.pruneExpiredStates();
     const state = randomUUID();
@@ -37,8 +36,6 @@ export class AuthService {
       redirect_uri: redirectUri,
       response_type: 'code',
       scope: scopes.join(' '),
-      access_type: 'offline',
-      prompt: 'consent',
       include_granted_scopes: 'true',
       state,
     });

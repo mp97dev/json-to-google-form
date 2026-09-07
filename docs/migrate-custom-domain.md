@@ -1,7 +1,11 @@
-# Migration Guide: Railway Public URL → formulino.ginkgo3d.it
+# Migration Guide: formulino.ginkgo3d.it → formulino.michelepasetto.it
 
-This guide migrates Formulino from the Railway-assigned public domain
-(`*.up.railway.app`) to the custom domain `formulino.ginkgo3d.it`.
+This guide migrates Formulino from `formulino.ginkgo3d.it` to the new custom
+domain `formulino.michelepasetto.it`.
+
+DNS for `michelepasetto.it` is hosted on **Cloudflare**; the domain itself is
+registered with **Aruba** (Aruba is only the registrar — all DNS record
+changes happen in the Cloudflare dashboard, not Aruba's).
 
 The migration has zero downtime: the old domain stays active until you
 explicitly remove it, and DNS + OAuth changes can be made before any Railway
@@ -13,13 +17,15 @@ variable is touched.
 
 | Setting | Before | After |
 |---|---|---|
-| Public URL | `https://<hash>.up.railway.app` | `https://formulino.ginkgo3d.it` |
-| `GOOGLE_REDIRECT_URI` | `https://<hash>.up.railway.app/api/auth/google/callback` | `https://formulino.ginkgo3d.it/api/auth/google/callback` |
-| `FRONTEND_URL` | `https://<hash>.up.railway.app` | `https://formulino.ginkgo3d.it` |
-| `CORS_ORIGIN` | `https://<hash>.up.railway.app` | `https://formulino.ginkgo3d.it` |
+| Public URL | `https://formulino.ginkgo3d.it` | `https://formulino.michelepasetto.it` |
+| `GOOGLE_REDIRECT_URI` | `https://formulino.ginkgo3d.it/api/auth/google/callback` | `https://formulino.michelepasetto.it/api/auth/google/callback` |
+| `FRONTEND_URL` | `https://formulino.ginkgo3d.it` | `https://formulino.michelepasetto.it` |
+| `CORS_ORIGIN` | `https://formulino.ginkgo3d.it` | `https://formulino.michelepasetto.it` |
 
 Nothing in the codebase changes — all configuration lives in Railway environment
-variables and Google Cloud Console.
+variables and Google Cloud Console. (The SEO-facing strings — canonical URLs,
+Open Graph tags, the JSON-LD `url`, the DSL schema `$id`, and the README link —
+were already updated to `formulino.michelepasetto.it` in this migration.)
 
 ---
 
@@ -28,39 +34,47 @@ variables and Google Cloud Console.
 1. Open [railway.app](https://railway.app) → your project → the Formulino service.
 2. Go to **Settings → Networking**.
 3. Click **Add Custom Domain**.
-4. Enter `formulino.ginkgo3d.it` and confirm.
+4. Enter `formulino.michelepasetto.it` and confirm.
 5. Railway displays a **CNAME target** — a string like `<hash>.up.railway.app`.
    Copy it; you need it in the next step.
 
-> Do **not** delete the old `*.up.railway.app` domain yet — keep both active
-> during the transition so existing sessions are not broken.
+> Do **not** remove the old `formulino.ginkgo3d.it` domain from Railway or
+> Google Cloud yet — keep both active during the transition so existing
+> sessions and bookmarks are not broken.
 
 ---
 
-## Step 2 — DNS: create the CNAME record
+## Step 2 — Cloudflare: create the CNAME record
 
-Log in to the DNS provider for `ginkgo3d.it` and add:
+Log in to the [Cloudflare dashboard](https://dash.cloudflare.com) → select
+the `michelepasetto.it` zone → **DNS → Records → Add record**:
 
-| Type | Name | Value | TTL |
-|---|---|---|---|
-| `CNAME` | `formulino` | `<CNAME target from Step 1>` | `300` |
+| Type | Name | Target | Proxy status | TTL |
+|---|---|---|---|---|
+| `CNAME` | `formulino` | `<CNAME target from Step 1>` | **DNS only** (grey cloud) | Auto |
 
-Set TTL to 300 (5 minutes) for now so you can correct mistakes quickly.
-Raise it to 3600 after everything is verified.
+**Important — keep the proxy status "DNS only" (grey cloud) at first.**
+If the record is proxied (orange cloud), Cloudflare terminates TLS and
+intercepts the domain-validation request Railway needs to issue its own
+Let's Encrypt certificate — Railway's dashboard will show "Certificate
+pending" indefinitely and never issue it. Once Railway shows **"Certificate
+issued"**, you can optionally switch the record to proxied (orange cloud) for
+Cloudflare's CDN/WAF — verify the site still loads and OAuth still completes
+after switching, since double TLS-termination through a proxy can occasionally
+interact with redirect handling.
 
-**Verify propagation** (takes 1–10 minutes):
+**Verify propagation** (usually near-instant on Cloudflare, but allow a minute):
 
 ```bash
-dig formulino.ginkgo3d.it CNAME +short
+dig formulino.michelepasetto.it CNAME +short
 # expected: <hash>.up.railway.app.
 
-curl -I https://formulino.ginkgo3d.it/health
+curl -I https://formulino.michelepasetto.it/health
 # expected: HTTP/2 200
 ```
 
-Railway provisions a TLS certificate automatically once it sees DNS resolving
-correctly. The Railway dashboard shows **"Certificate issued"** when it is ready
-— do not proceed to Step 3 until then.
+Do not proceed to Step 3 until Railway's dashboard shows **"Certificate issued"**
+for the new domain.
 
 ---
 
@@ -74,14 +88,16 @@ differently and must not be confused.
 Go to **APIs & Services → OAuth consent screen → Edit App → Authorized domains**.
 
 This field only accepts the **top private domain** — no subdomain prefix, no
-`https://`, no path. Enter:
+`https://`, no path. Add (do not remove `ginkgo3d.it` yet):
 
 ```
-ginkgo3d.it
+michelepasetto.it
 ```
 
-Entering `formulino.ginkgo3d.it` here will fail with *"must be a top private
-domain"*. The root domain `ginkgo3d.it` covers all subdomains automatically.
+Entering `formulino.michelepasetto.it` here will fail with *"must be a top
+private domain"*. The root domain `michelepasetto.it` covers all subdomains
+automatically — including `formulino.michelepasetto.it` and any other
+subdomain you host there (e.g. your portfolio site).
 
 ### 3b — OAuth 2.0 Client ID: Origins and Redirect URIs
 
@@ -91,15 +107,15 @@ These fields accept full URLs including subdomains.
 **Authorized JavaScript Origins** — add the new origin, keep the old one:
 
 ```
+https://formulino.michelepasetto.it
 https://formulino.ginkgo3d.it
-https://<hash>.up.railway.app
 ```
 
 **Authorized Redirect URIs** — add the new callback, keep the old one:
 
 ```
+https://formulino.michelepasetto.it/api/auth/google/callback
 https://formulino.ginkgo3d.it/api/auth/google/callback
-https://<hash>.up.railway.app/api/auth/google/callback
 ```
 
 Click **Save**. Google propagates the change within seconds.
@@ -115,9 +131,9 @@ In the Railway dashboard → your service → **Variables**, change these three 
 
 | Variable | New value |
 |---|---|
-| `GOOGLE_REDIRECT_URI` | `https://formulino.ginkgo3d.it/api/auth/google/callback` |
-| `FRONTEND_URL` | `https://formulino.ginkgo3d.it` |
-| `CORS_ORIGIN` | `https://formulino.ginkgo3d.it` |
+| `GOOGLE_REDIRECT_URI` | `https://formulino.michelepasetto.it/api/auth/google/callback` |
+| `FRONTEND_URL` | `https://formulino.michelepasetto.it` |
+| `CORS_ORIGIN` | `https://formulino.michelepasetto.it` |
 
 Save — Railway redeploys automatically. The redeploy takes ~1 minute.
 
@@ -127,20 +143,23 @@ Save — Railway redeploys automatically. The redeploy takes ~1 minute.
 
 ```bash
 # 1. Health check on the new domain
-curl https://formulino.ginkgo3d.it/health
+curl https://formulino.michelepasetto.it/health
 # expected: {"service":"backend","status":"ok"}
 
 # 2. Frontend HTML served
-curl -sI https://formulino.ginkgo3d.it/ | grep -i content-type
+curl -sI https://formulino.michelepasetto.it/ | grep -i content-type
 # expected: text/html
 
 # 3. OAuth redirect starts correctly
-curl -sI https://formulino.ginkgo3d.it/api/auth/google/login | grep -i location
+curl -sI https://formulino.michelepasetto.it/api/auth/google/login | grep -i location
 # expected: Location: https://accounts.google.com/o/oauth2/...
 ```
 
-Then open `https://formulino.ginkgo3d.it` in a browser and complete a full
-OAuth login → form creation flow to confirm everything works.
+Then open `https://formulino.michelepasetto.it` in a browser and complete a full
+OAuth login → form creation flow to confirm everything works. Since the OAuth
+token is passed as a URL fragment (`#access_token=…`, not a query param — see
+`docs/security-audit-2026-05-14.md` H1), also confirm the token never appears
+in the address bar's query string or in Railway's access logs.
 
 ---
 
@@ -150,20 +169,34 @@ Once you are confident the new domain is stable:
 
 ### Google Cloud Console
 
-Remove the old entries from both lists:
+Remove the old entries:
 
-- Authorized JavaScript Origins: delete `https://<hash>.up.railway.app`
-- Authorized Redirect URIs: delete `https://<hash>.up.railway.app/api/auth/google/callback`
+- Authorized domains: delete `ginkgo3d.it` (only if nothing else on that domain
+  needs it)
+- Authorized JavaScript Origins: delete `https://formulino.ginkgo3d.it`
+- Authorized Redirect URIs: delete `https://formulino.ginkgo3d.it/api/auth/google/callback`
 
 ### Railway
 
-Go to **Settings → Networking** and delete the old `*.up.railway.app` public
-domain. This prevents users from bypassing the custom domain and hitting the
-Railway URL directly.
+Go to **Settings → Networking** and delete the old `formulino.ginkgo3d.it`
+custom domain. This prevents users from bypassing the new domain and hitting
+the old one directly.
 
-### DNS
+### Cloudflare / DNS
 
-Raise the TTL on the `formulino` CNAME record from `300` to `3600`.
+Remove or repoint the old `formulino.ginkgo3d.it` DNS record (in whichever
+provider hosts the `ginkgo3d.it` zone) once you've confirmed no traffic is
+still landing on it.
+
+### SEO
+
+- Update Google Search Console: add `formulino.michelepasetto.it` as a new
+  property, submit its sitemap, and (once traffic has shifted) set up a
+  redirect or note the change of address if the old property should be
+  retired. See `docs/seo-traffic-guide.md`.
+- Google Search Console's **google-site-verification** meta tag in
+  `frontend/src/index.html` is tied to the property it was issued for — a new
+  property on the new domain will need its own verification tag.
 
 ---
 
@@ -171,15 +204,17 @@ Raise the TTL on the `formulino` CNAME record from `300` to `3600`.
 
 ### Railway shows "Certificate pending" for more than 10 minutes
 
-The CNAME record is not resolving yet. Verify with `dig formulino.ginkgo3d.it CNAME`.
-If the record is present, wait longer — some DNS providers have propagation delays
-up to 30 minutes even with low TTL.
+Almost always the Cloudflare proxy (orange cloud) is on. Switch the `formulino`
+CNAME record to **DNS only** (grey cloud) in Cloudflare and wait — Railway
+needs to see your origin directly to complete domain validation. If the record
+is already DNS-only, verify with `dig formulino.michelepasetto.it CNAME`.
 
 ### `redirect_uri_mismatch` after switching
 
-The `GOOGLE_REDIRECT_URI` variable still has the old Railway domain, or the
-new URI was not saved in Google Cloud Console. Double-check both exactly match
-`https://formulino.ginkgo3d.it/api/auth/google/callback` with no trailing slash.
+The `GOOGLE_REDIRECT_URI` variable still has the old domain, or the new URI
+was not saved in Google Cloud Console. Double-check both exactly match
+`https://formulino.michelepasetto.it/api/auth/google/callback` with no
+trailing slash.
 
 ### Old domain still works, new domain returns 502
 
@@ -192,3 +227,9 @@ trigger a manual redeploy from the Railway dashboard.
 
 `CORS_ORIGIN` was not updated or the redeployment did not pick it up. Confirm
 the variable value in Railway, then trigger a manual redeploy if needed.
+
+### Site loads but OAuth callback hangs or shows a certificate warning after enabling Cloudflare proxy
+
+Switch the `formulino` record back to **DNS only** (grey cloud) and confirm
+Railway's certificate is still valid. Re-enable the proxy only after
+confirming the plain DNS-only setup works end-to-end.
